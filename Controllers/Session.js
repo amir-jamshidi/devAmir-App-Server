@@ -21,8 +21,11 @@ const createMeeting = async (req, res) => {
     const meeting = await meetingModel.create({
         sessionID, courseID, name, time, video: req.file.filename, isFree, href
     })
+
+    const mettingTime = Number(time.split(':')[0]);
+
     if (meeting) {
-        await courseModel.findOneAndUpdate({ _id: courseID }, { $inc: { meetingsCount: +1 } })
+        await courseModel.findOneAndUpdate({ _id: courseID }, { $inc: { meetingsCount: +1, time: mettingTime } })
         res.status(201).json(meeting)
     }
 }

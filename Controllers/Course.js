@@ -101,6 +101,8 @@ const getOne = async (req, res) => {
     if (course) {
 
         course.createdAt = converToPersian(course.createdAt);
+        course.updatedAt = converToPersian(course.updatedAt);
+        course.time = Math.round(Number(course.time) / 60);
         const commentsCount = await commentModel.find({ courseID: course._id }).count().lean();
         course.commentsCount = commentsCount;
 
