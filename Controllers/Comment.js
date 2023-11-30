@@ -20,7 +20,7 @@ const gteComments = async (req, res) => {
 
 
     const course = await courseModel.findOne({ href }).lean();
-    if (!course) {
+    if (!course) { 
         return res.status(421).json({ message: 'Course Not Found' });
     }
     const comments = await commentModel.find({ courseID: course._id, isShow: 1 }).sort({ _id: -1 }).limit(limit).populate('creatorID', 'fullname role  profile').lean();
