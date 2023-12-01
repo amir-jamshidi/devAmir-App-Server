@@ -13,7 +13,6 @@ const verifyUser = async (req, res, next) => {
     }
 
     const authToken = token[1];
-
     try {
         const jwtPyload = jwt.verify(authToken, process.env.JWTSECRET);
         const user = await userModel.findOne({ _id: jwtPyload.id });
@@ -24,7 +23,6 @@ const verifyUser = async (req, res, next) => {
     } catch (error) {
         res.status(402).json({ ErrorJWT: error });
     }
-
 }
 
 
