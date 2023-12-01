@@ -1,9 +1,6 @@
 import banModel from '../Models/Bans.js'
 import userModel from '../Models/User.js'
-
-
 const create = async (req, res) => {
-
     const { userID } = req.body;
 
     const user = await userModel.findOne({ _id: userID });
