@@ -25,8 +25,6 @@ const gteComments = async (req, res) => {
     }
     const comments = await commentModel.find({ courseID: course._id, isShow: 1 }).sort({ _id: -1 }).limit(limit).populate('creatorID', 'fullname role  profile').lean();
 
-
-
     //Convert Date 
     comments.forEach(comment => {
         comment.createdAt = converToPersian(comment.createdAt);
