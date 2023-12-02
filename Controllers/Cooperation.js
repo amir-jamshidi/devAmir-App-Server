@@ -9,7 +9,7 @@ const create = async (req, res) => {
         res.status(200).json({ message: "Send Cooperation Success" });
     }
 }
-
+  
 export {
     create
 } 
