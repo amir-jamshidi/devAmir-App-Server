@@ -29,5 +29,4 @@ const schema = new mongoose.Schema({
 }, { timestamps: true })
 
 const model = mongoose.model('user', schema);
-
 export default model
