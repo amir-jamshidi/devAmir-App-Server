@@ -9,8 +9,7 @@ const verifyUser = async (req, res, next) => {
         req.user = null;
         return next();
     }
-
-
+    
     //Verify Token
     if (token?.length !== 2) {
         return res.status(403).json({
