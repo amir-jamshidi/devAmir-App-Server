@@ -8,14 +8,12 @@ const create = async (req, res) => {
         res.status(201).json(ticket)
     }
 }
-
 const getTickets = async (req, res) => {
     const tickets = await ticketsModel.find({ creatorID: req.user._id }).sort({ _id: -1 }).lean();
     if (tickets) {
         res.status(200).json(tickets)
     }
 }
-
 const getOne = async (req, res) => {
     const { id } = req.params;
     const ticket = await ticketsModel.findOne({ _id: id, creatorID: req.user._id }).lean();
