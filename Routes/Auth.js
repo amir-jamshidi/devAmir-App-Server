@@ -15,4 +15,4 @@ router.route('/update').put(AuthMiddle, editProfile);
 router.route('/profile').put(AuthMiddle, multer({ storage: uploaderMiddle, limits: { fileSize: 100000000 } }).single('profile'), editProfileImage)
 router.route('/dashboard').get(AuthMiddle, getDashboard)
 //--
-export default router
+export default router 
