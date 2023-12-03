@@ -20,4 +20,5 @@ router.route('/:href').get(OptionalAuthMiddle, getOne);
 router.route('/:href/register').post(AuthMiddle, registerCourse);
 router.route('/category/:categoryID/:sort').get(getByCategoryID)
 router.route('/search/:value/:sort').get(searchCourses)
+//--
 export default router 
