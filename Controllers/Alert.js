@@ -1,9 +1,13 @@
 import alertModel from "../Models/Alert.js";
 
-const getAll = async (req, res) => {
-    const allAlert = await alertModel.find({ isShow: 1 }).populate('creator' , 'fullname').lean();
-    if (allAlert) {
-        res.status(200).json(allAlert)
+const getAll = async (req, res, next) => {
+    try {
+        const allAlert = await alertModel.find({ isShow: 1 }).populate('creator', 'fullname').lean();
+        if (allAlert) {
+            res.status(200).json(allAlert)
+        }
+    } catch (error) {
+        next();
     }
 }
 
