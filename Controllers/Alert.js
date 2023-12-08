@@ -11,17 +11,22 @@ const getAll = async (req, res, next) => {
     }
 }
 
-const insetAlert = async (req, res) => {
-    const { title, body, btn, color, isShow, href } = req.body
-    const newAlert = await alertModel.create({
-        title, body, btn, color, isShow, href, creator: req.user._id
-    });
-    if (newAlert) {
-        res.status(201).json({
-            code: 201,
-            alert: newAlert
-        })
+const insetAlert = async (req, res, next) => {
+    try {
+        const { title, body, btn, color, isShow, href } = req.body
+        const newAlert = await alertModel.create({
+            title, body, btn, color, isShow, href, creator: req.user._id
+        });
+        if (newAlert) {
+            res.status(201).json({
+                code: 201,
+                alert: newAlert
+            })
+        }
+    } catch (error) {
+        next()
     }
+
 }
 export {
     getAll,
