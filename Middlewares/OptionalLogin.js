@@ -4,8 +4,6 @@ import userModel from '../Models/User.js'
 
 const verifyUser = async (req, res, next) => {
 
-    req.user = null;
-    return next();
 
     const token = req.header('Authorization')?.split(" ");
 
