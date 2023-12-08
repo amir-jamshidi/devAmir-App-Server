@@ -9,6 +9,9 @@ const create = async (req, res) => {
     const { name, description, categoryID, isFree, price, discount, support, prerequisite, status, time, href } = req.body;
 
 
+    console.log(req.file.filename);
+
+
     const course = await courseModel.create({
         name, description, href, creatorID: req.user._id, categoryID, isFree, price, discount, cover: req.file.filename, time, score: 5
         , meetingsCount: 0, support, prerequisite, status

@@ -22,12 +22,11 @@ const alertSchema = new mongoose.Schema({
     },
     href: {
         type: String,
-        required: true
     },
     creator: {
         type: mongoose.Types.ObjectId,
         ref: 'user'
     }
-},{ timestamps: true })
+}, { timestamps: true })
 const alertModel = mongoose.model('alerts', alertSchema);
 export default alertModel
