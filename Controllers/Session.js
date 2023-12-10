@@ -19,19 +19,24 @@ const create = async (req, res, next) => {
 
 }
 
-const createMeeting = async (req, res) => {
-    const { sessionID, courseID, name, time, isFree } = req.body
-    const href = String(Date.now() + Math.floor(Math.random() * 100000));
-    const meeting = await meetingModel.create({
-        sessionID, courseID, name, time, video: req.file.filename, isFree, href
-    })
+const createMeeting = async (req, res, next) => {
+    try {
+        const { sessionID, courseID, name, time, isFree } = req.body
+        const href = String(Date.now() + Math.floor(Math.random() * 100000));
+        const meeting = await meetingModel.create({
+            sessionID, courseID, name, time, video: req.file.filename, isFree, href
+        })
 
-    const mettingTime = Number(time.split(':')[0]);
+        const mettingTime = Number(time.split(':')[0]);
 
-    if (meeting) {
-        await courseModel.findOneAndUpdate({ _id: courseID }, { $inc: { meetingsCount: +1, time: mettingTime } })
-        res.status(201).json(meeting)
+        if (meeting) {
+            await courseModel.findOneAndUpdate({ _id: courseID }, { $inc: { meetingsCount: +1, time: mettingTime } })
+            res.status(201).json(meeting)
+        }
+    } catch (err) {
+        next()
     }
+
 }
 
 const getMeeting = async (req, res) => {
