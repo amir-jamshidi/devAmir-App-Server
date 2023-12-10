@@ -3,15 +3,19 @@ import meetingModel from '../Models/Meeting.js'
 import courseRegisterModel from '../Models/CourseRegister.js'
 import courseModel from '../Models/Course.js'
 
-const create = async (req, res) => {
-
-    const { name, time, courseID, isFree } = req.body;
-    const session = await sessionModel.create({
-        name, time, courseID, isFree
-    })
-    if (session) {
-        res.status(201).json(session);
+const create = async (req, res, next) => {
+    try {
+        const { name, time, courseID, isFree } = req.body;
+        const session = await sessionModel.create({
+            name, time, courseID, isFree
+        })
+        if (session) {
+            res.status(201).json(session);
+        }
+    } catch (error) {
+        next();
     }
+
 
 }
 
