@@ -25,11 +25,17 @@ const getTickets = async (req, res, next) => {
 
 }
 const getOne = async (req, res) => {
-    const { id } = req.params;
-    const ticket = await ticketsModel.findOne({ _id: id, creatorID: req.user._id }).lean();
-    if (ticket) {
-        ticket.createdAt = converToPersian(ticket.createdAt);
-        res.status(200).json(ticket)
+    try {
+
+
+        const { id } = req.params;
+        const ticket = await ticketsModel.findOne({ _id: id, creatorID: req.user._id }).lean();
+        if (ticket) {
+            ticket.createdAt = converToPersian(ticket.createdAt);
+            res.status(200).json(ticket)
+        }
+    } catch (error) {
+
     }
 }
 export {
