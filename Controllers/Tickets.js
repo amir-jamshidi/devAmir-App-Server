@@ -1,11 +1,16 @@
 import ticketsModel from '../Models/Tickets.js'
 import converToPersian from './../Utils/PersianDate.js';
 
-const create = async (req, res) => {
-    const { body, priority } = req.body;
-    const ticket = await ticketsModel.create({ body, priority, creatorID: req.user._id });
-    if (ticket) {
-        res.status(201).json(ticket)
+const create = async (req, res , next) => {
+    try {
+        const { body, priority } = req.body;
+        const ticket = await ticketsModel.create({ body, priority, creatorID: req.user._id });
+        if (ticket) {
+            res.status(201).json(ticket)
+        }
+    }
+    catch (error) {
+        next();
     }
 }
 const getTickets = async (req, res) => {
