@@ -20,12 +20,9 @@ const create = async (req, res, next) => {
     }
 }
 
-const getQuestion = async (req, res) => {
+const getQuestion = async (req, res, next) => {
 
     try {
-
-
-
         const { courseID } = req.params;
 
         if (!mongoose.Types.ObjectId.isValid(courseID)) {
@@ -53,24 +50,26 @@ const getQuestion = async (req, res) => {
             res.status(200).json({ course, questions });
         }
     } catch (error) {
-
+        next();
     }
 }
 
-const getOne = async (req, res) => {
+const getOne = async (req, res, next) => {
+    try {
+        const { questionID } = req.params;
+        if (!mongoose.Types.ObjectId.isValid(questionID)) {
+            return res.status(421).json({ message: "InvalidData" })
+        }
+        const question = await questionModel.findOne({ _id: questionID, creatorID: req.user._id }).lean();
 
-    const { questionID } = req.params;
-    if (!mongoose.Types.ObjectId.isValid(questionID)) {
-        return res.status(421).json({ message: "InvalidData" })
+        if (!question) {
+            return res.status(404).json({ message: "Not Found " })
+        }
+        question.createdAt = converToPersian(question.createdAt)
+        res.status(200).json(question);
+    } catch (error) {
+        next()
     }
-    const question = await questionModel.findOne({ _id: questionID, creatorID: req.user._id }).lean();
-
-    if (!question) {
-        return res.status(404).json({ message: "Not Found " })
-    }
-    question.createdAt = converToPersian(question.createdAt)
-    res.status(200).json(question);
-
 
 }
 
