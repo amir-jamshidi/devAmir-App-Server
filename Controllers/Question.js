@@ -4,15 +4,19 @@ import courseRegisterModel from '../Models/CourseRegister.js'
 import converToPersian from '../Utils/PersianDate.js';
 import mongoose from 'mongoose';
 
-const create = async (req, res) => {
-    const { courseID, body } = req.body
-    const question = await questionModel.create({
-        creatorID: req.user._id,
-        courseID,
-        body
-    });
-    if (question) {
-        res.status(201).json(question)
+const create = async (req, res, next) => {
+    try {
+        const { courseID, body } = req.body
+        const question = await questionModel.create({
+            creatorID: req.user._id,
+            courseID,
+            body
+        });
+        if (question) {
+            res.status(201).json(question)
+        }
+    } catch (error) {
+        next()
     }
 }
 
