@@ -21,32 +21,39 @@ const create = async (req, res, next) => {
 }
 
 const getQuestion = async (req, res) => {
-    const { courseID } = req.params;
+
+    try {
 
 
-    if (!mongoose.Types.ObjectId.isValid(courseID)) {
-        return res.status(421).json({ message: 'InValidDatat' })
-    }
 
-    const questions = await questionModel.find({ creatorID: req.user._id, courseID }).sort({ _id: -1 }).lean();
-    const course = await courseModel.findOne({ _id: courseID }).lean();
-    const isRegisterToCourse = await courseRegisterModel.findOne({ courseID, userID: req.user._id }).lean();
+        const { courseID } = req.params;
 
-    if (!course) {
-        return res.status(403).json({ message: 'Not Found Questions' })
-    }
+        if (!mongoose.Types.ObjectId.isValid(courseID)) {
+            return res.status(421).json({ message: 'InValidDatat' })
+        }
 
-    course.isRegisterToCourse = isRegisterToCourse ? true : false
+        const questions = await questionModel.find({ creatorID: req.user._id, courseID }).sort({ _id: -1 }).lean();
+        const course = await courseModel.findOne({ _id: courseID }).lean();
+        const isRegisterToCourse = await courseRegisterModel.findOne({ courseID, userID: req.user._id }).lean();
 
-    if (!isRegisterToCourse) {
-        return res.json({ course, questions: [] })
-    }
+        if (!course) {
+            return res.status(403).json({ message: 'Not Found Questions' })
+        }
 
-    if (questions) {
-        questions.forEach(question => {
-            question.createdAt = converToPersian(question.createdAt);
-        })
-        res.status(200).json({ course, questions });
+        course.isRegisterToCourse = isRegisterToCourse ? true : false
+
+        if (!isRegisterToCourse) {
+            return res.json({ course, questions: [] })
+        }
+
+        if (questions) {
+            questions.forEach(question => {
+                question.createdAt = converToPersian(question.createdAt);
+            })
+            res.status(200).json({ course, questions });
+        }
+    } catch (error) {
+
     }
 }
 
