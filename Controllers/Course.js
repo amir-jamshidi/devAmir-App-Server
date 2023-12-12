@@ -23,9 +23,6 @@ const create = async (req, res, next) => {
 const getAll = async (req, res, next) => {
 
     try {
-
-
-
         const { sort } = req.params
 
         let allCourses = []
@@ -66,9 +63,13 @@ const getAll = async (req, res, next) => {
 }
 
 const getLastedCourses = async (req, res) => {
-    const lastedCourses = await courseModel.find({}).populate('creatorID', 'fullname').populate('categoryID').sort({ _id: -1 }).limit(4).lean();
-    if (lastedCourses) {
-        return res.status(200).json(lastedCourses)
+    try {
+        const lastedCourses = await courseModel.find({}).populate('creatorID', 'fullname').populate('categoryID').sort({ _id: -1 }).limit(4).lean();
+        if (lastedCourses) {
+            return res.status(200).json(lastedCourses)
+        }
+    } catch (error) {
+
     }
 }
 
