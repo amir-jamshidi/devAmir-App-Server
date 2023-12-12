@@ -5,19 +5,22 @@ import courseRegisterModel from '../Models/CourseRegister.js'
 import converToPersian from '../Utils/PersianDate.js'
 import commentModel from '../Models/Comment.js'
 
-const create = async (req, res) => {
-    const { name, description, categoryID, isFree, price, discount, support, prerequisite, status, time, href } = req.body;
+const create = async (req, res, next) => {
+    try {
 
 
-    console.log(req.file.filename);
+        const { name, description, categoryID, isFree, price, discount, support, prerequisite, status, time, href } = req.body;
 
 
-    const course = await courseModel.create({
-        name, description, href, creatorID: req.user._id, categoryID, isFree, price, discount, cover: req.file.filename, time, score: 5
-        , meetingsCount: 0, support, prerequisite, status
-    });
-    if (course) {
-        res.status(201).json(course);
+        const course = await courseModel.create({
+            name, description, href, creatorID: req.user._id, categoryID, isFree, price, discount, cover: req.file.filename, time, score: 5
+            , meetingsCount: 0, support, prerequisite, status
+        });
+        if (course) {
+            res.status(201).json(course);
+        }
+    } catch (error) {
+        next()
     }
 }
 

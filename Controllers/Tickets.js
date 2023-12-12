@@ -24,7 +24,7 @@ const getTickets = async (req, res, next) => {
     }
 
 }
-const getOne = async (req, res) => {
+const getOne = async (req, res, next) => {
     try {
 
 
@@ -35,7 +35,7 @@ const getOne = async (req, res) => {
             res.status(200).json(ticket)
         }
     } catch (error) {
-
+        next()
     }
 }
 export {

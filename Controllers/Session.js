@@ -39,10 +39,8 @@ const createMeeting = async (req, res, next) => {
 
 }
 
-const getMeeting = async (req, res , next) => {
+const getMeeting = async (req, res, next) => {
     try {
-
-
         const { href } = req.params;
         const meeting = await meetingModel.findOne({ href })
         if (!meeting) {
