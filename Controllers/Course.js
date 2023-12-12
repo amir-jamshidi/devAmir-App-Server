@@ -62,7 +62,7 @@ const getAll = async (req, res, next) => {
     }
 }
 
-const getLastedCourses = async (req, res) => {
+const getLastedCourses = async (req, res, next) => {
     try {
         const lastedCourses = await courseModel.find({}).populate('creatorID', 'fullname').populate('categoryID').sort({ _id: -1 }).limit(4).lean();
         if (lastedCourses) {
@@ -73,10 +73,14 @@ const getLastedCourses = async (req, res) => {
     }
 }
 
-const getPopularCourses = async (req, res) => {
-    const popularCourses = await courseModel.find({}).sort({ score: -1 }).populate('creatorID', 'fullname').populate('categoryID').limit(8).lean();
-    if (popularCourses) {
-        res.status(200).json(popularCourses)
+const getPopularCourses = async(req, res, next) => {
+    try {
+        const popularCourses = await courseModel.find({}).sort({ score: -1 }).populate('creatorID', 'fullname').populate('categoryID').limit(8).lean();
+        if (popularCourses) {
+            res.status(200).json(popularCourses)
+        }
+    } catch (error) {
+        next()
     }
 }
 
