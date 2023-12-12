@@ -7,11 +7,7 @@ import commentModel from '../Models/Comment.js'
 
 const create = async (req, res, next) => {
     try {
-
-
         const { name, description, categoryID, isFree, price, discount, support, prerequisite, status, time, href } = req.body;
-
-
         const course = await courseModel.create({
             name, description, href, creatorID: req.user._id, categoryID, isFree, price, discount, cover: req.file.filename, time, score: 5
             , meetingsCount: 0, support, prerequisite, status
@@ -24,40 +20,48 @@ const create = async (req, res, next) => {
     }
 }
 
-const getAll = async (req, res) => {
-    const { sort } = req.params
+const getAll = async (req, res, next) => {
 
-    let allCourses = []
+    try {
 
-    switch (sort) {
-        case 'all': {
-            allCourses = await courseModel.find({}).sort({ _id: -1 }).populate('creatorID', 'fullname').populate('categoryID').lean();
-            break
+
+
+        const { sort } = req.params
+
+        let allCourses = []
+
+        switch (sort) {
+            case 'all': {
+                allCourses = await courseModel.find({}).sort({ _id: -1 }).populate('creatorID', 'fullname').populate('categoryID').lean();
+                break
+            }
+            case 'inexpensive': {
+                allCourses = await courseModel.find({}).sort({ price: 1 }).populate('creatorID', 'fullname').populate('categoryID').lean();
+
+                break
+            }
+            case 'expensive': {
+                allCourses = await courseModel.find({}).sort({ price: -1 }).populate('creatorID', 'fullname').populate('categoryID').lean();
+
+                break
+            }
+            case 'popular': {
+                allCourses = await courseModel.find({}).sort({ sellCount: -1 }).populate('creatorID', 'fullname').populate('categoryID').lean();
+
+                break
+            }
+            default: {
+                allCourses = await courseModel.find({}).sort({ _id: -1 }).populate('creatorID', 'fullname').populate('categoryID').lean();
+
+            }
         }
-        case 'inexpensive': {
-            allCourses = await courseModel.find({}).sort({ price: 1 }).populate('creatorID', 'fullname').populate('categoryID').lean();
 
-            break
+
+        if (allCourses) {
+            return res.status(200).json(allCourses)
         }
-        case 'expensive': {
-            allCourses = await courseModel.find({}).sort({ price: -1 }).populate('creatorID', 'fullname').populate('categoryID').lean();
-
-            break
-        }
-        case 'popular': {
-            allCourses = await courseModel.find({}).sort({ sellCount: -1 }).populate('creatorID', 'fullname').populate('categoryID').lean();
-
-            break
-        }
-        default: {
-            allCourses = await courseModel.find({}).sort({ _id: -1 }).populate('creatorID', 'fullname').populate('categoryID').lean();
-
-        }
-    }
-
-
-    if (allCourses) {
-        return res.status(200).json(allCourses)
+    } catch (error) {
+        next()
     }
 }
 
