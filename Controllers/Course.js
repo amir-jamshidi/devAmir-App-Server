@@ -84,56 +84,65 @@ const getPopularCourses = async (req, res, next) => {
     }
 }
 
-const getBestSellerCourses = async (req, res) => {
-    const bestSellerCourses = await courseModel.find({}).sort({ sellCount: -1 }).populate('creatorID', 'fullname').populate('categoryID').limit(8).lean();
-    if (bestSellerCourses) {
-        res.status(200).json(bestSellerCourses)
+const getBestSellerCourses = async (req, res, next) => {
+    try {
+
+        const bestSellerCourses = await courseModel.find({}).sort({ sellCount: -1 }).populate('creatorID', 'fullname').populate('categoryID').limit(8).lean();
+        if (bestSellerCourses) {
+            res.status(200).json(bestSellerCourses)
+        }
+
+    } catch (error) {
+
     }
 }
 
-const getOne = async (req, res) => {
-
-    const { href } = req.params;
-    const course = await courseModel.findOne({ href }).populate('creatorID', 'fullname profile').populate('categoryID').lean();
-    if (!course) {
-        return res.status(421).json({ message: 'Course Not Found' })
-    }
-    const sessions = await sessionModel.find({ courseID: course._id }).lean();
-    const meetings = await meetingModel.find({ courseID: course._id })
-
-    sessions.forEach(session => {
-        session.meetings = [];
-        meetings.forEach(metting => {
-
-            if (session._id.equals(metting.sessionID)) {
-                session.meetings.push(metting);
-            }
-
-        })
-    })
-
-
-    if (course) {
-
-        course.createdAt = converToPersian(course.createdAt);
-        course.updatedAt = converToPersian(course.updatedAt);
-        course.time = Math.round(Number(course.time) / 60);
-        const commentsCount = await commentModel.find({ courseID: course._id }).count().lean();
-        course.commentsCount = commentsCount;
-
-        if (req.user === null) {
-            course.accessToCourse = false;
-        } else {
-            const isRegisterToCourse = await courseRegisterModel.findOne({ courseID: course._id, userID: req.user._id })
-            if (isRegisterToCourse) {
-                course.accessToCourse = true;
-            } else {
-                course.accessToCourse = false;
-            }
+const getOne = async (req, res, next) => {
+    try {
+        const { href } = req.params;
+        const course = await courseModel.findOne({ href }).populate('creatorID', 'fullname profile').populate('categoryID').lean();
+        if (!course) {
+            return res.status(421).json({ message: 'Course Not Found' })
         }
+        const sessions = await sessionModel.find({ courseID: course._id }).lean();
+        const meetings = await meetingModel.find({ courseID: course._id })
 
-        course.sessions = sessions;
-        res.status(200).json(course);
+        sessions.forEach(session => {
+            session.meetings = [];
+            meetings.forEach(metting => {
+
+                if (session._id.equals(metting.sessionID)) {
+                    session.meetings.push(metting);
+                }
+
+            })
+        })
+
+
+        if (course) {
+
+            course.createdAt = converToPersian(course.createdAt);
+            course.updatedAt = converToPersian(course.updatedAt);
+            course.time = Math.round(Number(course.time) / 60);
+            const commentsCount = await commentModel.find({ courseID: course._id }).count().lean();
+            course.commentsCount = commentsCount;
+
+            if (req.user === null) {
+                course.accessToCourse = false;
+            } else {
+                const isRegisterToCourse = await courseRegisterModel.findOne({ courseID: course._id, userID: req.user._id })
+                if (isRegisterToCourse) {
+                    course.accessToCourse = true;
+                } else {
+                    course.accessToCourse = false;
+                }
+            }
+
+            course.sessions = sessions;
+            res.status(200).json(course);
+        }
+    } catch (error) {
+        next()
     }
 }
 
