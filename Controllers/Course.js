@@ -146,27 +146,31 @@ const getOne = async (req, res, next) => {
     }
 }
 
-const registerCourse = async (req, res) => {
+const registerCourse = async (req, res, next) => {
+    try {
 
-    const { href } = req.params
-    const { price } = req.body
-    const course = await courseModel.findOne({ href });
-    if (!course) {
-        return res.status(421).json({ message: 'Course Not Found' })
-    }
-    const courseRegister = await courseRegisterModel.create({
-        courseID: course._id,
-        userID: req.user._id,
-        price,
-        orderNumber: String(Date.now() + Math.floor(Math.random() * 100000))
-    })
-    if (courseRegister) {
-        await courseModel.findOneAndUpdate({ _id: course._id }, { $inc: { sellCount: +1 } });
-        res.status(201).json({
-            message: "Registration Is Success"
-        });
-    }
+        const { href } = req.params
+        const { price } = req.body
+        const course = await courseModel.findOne({ href });
+        if (!course) {
+            return res.status(421).json({ message: 'Course Not Found' })
+        }
+        const courseRegister = await courseRegisterModel.create({
+            courseID: course._id,
+            userID: req.user._id,
+            price,
+            orderNumber: String(Date.now() + Math.floor(Math.random() * 100000))
+        })
+        if (courseRegister) {
+            await courseModel.findOneAndUpdate({ _id: course._id }, { $inc: { sellCount: +1 } });
+            res.status(201).json({
+                message: "Registration Is Success"
+            });
+        }
 
+    } catch (error) {
+        next()
+    }
 }
 
 const getByCategoryID = async (req, res) => {
