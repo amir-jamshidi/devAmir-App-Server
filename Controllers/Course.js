@@ -173,10 +173,9 @@ const registerCourse = async (req, res, next) => {
     }
 }
 
-const getByCategoryID = async (req, res) => {
-    const { categoryID, sort } = req.params;
-
+const getByCategoryID = async (req, res, next) => {
     try {
+        const { categoryID, sort } = req.params;
         let courses = [];
         switch (sort) {
             case 'all': {
@@ -200,11 +199,9 @@ const getByCategoryID = async (req, res) => {
             }
         }
         res.status(200).json(courses);
+
     } catch (error) {
-
-
-        console.log(error)
-
+        next()
     }
 }
 
