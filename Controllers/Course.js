@@ -205,47 +205,49 @@ const getByCategoryID = async (req, res, next) => {
     }
 }
 
-const searchCourses = async (req, res) => {
-    const { value, sort } = req.params;
+const searchCourses = async (req, res , next) => {
 
+    try {
+        const { value, sort } = req.params;
 
-    let courses = [];
+        let courses = [];
 
+        switch (sort) {
+            case 'all': {
+                courses = await courseModel.find({
+                    name: { $regex: '.*' + value + '.*' }
+                }).sort({ _id: -1 }).populate('creatorID', 'fullname').populate('categoryID').lean(); res.status(200).json(courses)
+                break
+            }
+            case 'inexpensive': {
+                courses = await courseModel.find({
+                    name: { $regex: '.*' + value + '.*' }
+                }).sort({ price: 1 }).populate('creatorID', 'fullname').populate('categoryID').lean(); res.status(200).json(courses)
+                break
+            }
+            case 'expensive': {
+                courses = await courseModel.find({
+                    name: { $regex: '.*' + value + '.*' }
+                }).sort({ price: -1 }).populate('creatorID', 'fullname').populate('categoryID').lean(); res.status(200).json(courses)
 
-    switch (sort) {
-        case 'all': {
-            courses = await courseModel.find({
-                name: { $regex: '.*' + value + '.*' }
-            }).sort({ _id: -1 }).populate('creatorID', 'fullname').populate('categoryID').lean(); res.status(200).json(courses)
-            break
+                break
+            }
+            case 'popular': {
+                courses = await courseModel.find({
+                    name: { $regex: '.*' + value + '.*' }
+                }).sort({ sellCount: -1 }).populate('creatorID', 'fullname').populate('categoryID').lean(); res.status(200).json(courses)
+                break
+            }
+            default: {
+                courses = await courseModel.find({
+                    name: { $regex: '.*' + value + '.*' }
+                }).sort({ _id: -1 }).populate('creatorID', 'fullname').populate('categoryID').lean(); res.status(200).json(courses)
+
+            }
         }
-        case 'inexpensive': {
-            courses = await courseModel.find({
-                name: { $regex: '.*' + value + '.*' }
-            }).sort({ price: 1 }).populate('creatorID', 'fullname').populate('categoryID').lean(); res.status(200).json(courses)
-            break
-        }
-        case 'expensive': {
-            courses = await courseModel.find({
-                name: { $regex: '.*' + value + '.*' }
-            }).sort({ price: -1 }).populate('creatorID', 'fullname').populate('categoryID').lean(); res.status(200).json(courses)
-
-            break
-        }
-        case 'popular': {
-            courses = await courseModel.find({
-                name: { $regex: '.*' + value + '.*' }
-            }).sort({ sellCount: -1 }).populate('creatorID', 'fullname').populate('categoryID').lean(); res.status(200).json(courses)
-            break
-        }
-        default: {
-            courses = await courseModel.find({
-                name: { $regex: '.*' + value + '.*' }
-            }).sort({ _id: -1 }).populate('creatorID', 'fullname').populate('categoryID').lean(); res.status(200).json(courses)
-
-        }
+    } catch (error) {
+        next()
     }
-
 
 }
 
