@@ -73,7 +73,7 @@ const getLastedCourses = async (req, res, next) => {
     }
 }
 
-const getPopularCourses = async(req, res, next) => {
+const getPopularCourses = async (req, res, next) => {
     try {
         const popularCourses = await courseModel.find({}).sort({ score: -1 }).populate('creatorID', 'fullname').populate('categoryID').limit(8).lean();
         if (popularCourses) {
