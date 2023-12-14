@@ -2,17 +2,19 @@ import commentModel from '../Models/Comment.js'
 import courseModel from '../Models/Course.js'
 import converToPersian from '../Utils/PersianDate.js';
 
-const create = async (req, res) => {
+const create = async (req, res, next) => {
 
-
-    const { body, courseID, score } = req.body;
-    const comment = await commentModel.create({
-        body, courseID, score, creatorID: req.user._id, isShow: 0
-    });
-    if (comment) {
-        res.status(201).json(comment);
+    try {
+        const { body, courseID, score } = req.body;
+        const comment = await commentModel.create({
+            body, courseID, score, creatorID: req.user._id, isShow: 0
+        });
+        if (comment) {
+            res.status(201).json(comment);
+        }
+    } catch (error) {
+        next();
     }
-
 }
 const gteComments = async (req, res) => {
 
