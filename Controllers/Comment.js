@@ -37,9 +37,13 @@ const gteComments = async (req, res, next) => {
     }
 
 }
-const getMainCommnets = async (req, res) => {
-    const comments = await commentModel.find({ score: 5, isShow: 1 }).sort({ _id: -1 }).populate('creatorID').populate('courseID', 'href name').limit(8).lean();
-    res.status(200).json(comments)
+const getMainCommnets = async (req, res, next) => {
+    try {
+        const comments = await commentModel.find({ score: 5, isShow: 1 }).sort({ _id: -1 }).populate('creatorID').populate('courseID', 'href name').limit(8).lean();
+        res.status(200).json(comments)
+    } catch (error) {
+        next();
+    }
 }
 export {
     create,
