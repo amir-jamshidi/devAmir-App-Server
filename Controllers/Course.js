@@ -205,7 +205,7 @@ const getByCategoryID = async (req, res, next) => {
     }
 }
 
-const searchCourses = async (req, res , next) => {
+const searchCourses = async (req, res, next) => {
 
     try {
         const { value, sort } = req.params;
@@ -251,13 +251,17 @@ const searchCourses = async (req, res , next) => {
 
 }
 
-const getMyCourses = async (req, res) => {
-    const courses = await courseRegisterModel.find({ userID: req.user._id }).populate('courseID').lean();
-    if (courses) {
-        courses.forEach(course => {
-            course.createdAt = converToPersian(course?.createdAt)
-        })
-        res.status(200).json(courses);
+const getMyCourses = async (req, res, next) => {
+    try {
+        const courses = await courseRegisterModel.find({ userID: req.user._id }).populate('courseID').lean();
+        if (courses) {
+            courses.forEach(course => {
+                course.createdAt = converToPersian(course?.createdAt)
+            })
+            res.status(200).json(courses);
+        }
+    } catch (error) {
+        next();
     }
 }
 
