@@ -138,11 +138,14 @@ const editProfile = async (req, res, next) => {
         next(error)
     }
 }
-const editProfileImage = async (req, res) => {
-
-    const user = await userModel.findOneAndUpdate({ _id: req.user._id }, { profile: req.file.filename })
-    if (user) {
-        res.status(200).json({ message: 'Change Profile Success' });
+const editProfileImage = async (req, res, next) => {
+    try {
+        const user = await userModel.findOneAndUpdate({ _id: req.user._id }, { profile: req.file.filename })
+        if (user) {
+            res.status(200).json({ message: 'Change Profile Success' });
+        }
+    } catch (error) {
+        next(error);
     }
 }
 const getDashboard = async (req, res) => {
