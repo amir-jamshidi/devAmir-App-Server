@@ -79,38 +79,43 @@ const register = async (req, res, next) => {
         next(error);
     }
 }
-const login = async (req, res) => {
+const login = async (req, res, next) => {
 
-    const { identifire, password } = req.body;
+    try {
+        const { identifire, password } = req.body;
 
-    //Check Has User
+        //Check Has User
 
 
-    const isHasUser = await userModel.findOne({
-        $or: [{ email: identifire }, { phone: identifire }]
-    })
-    if (!isHasUser) {
-        return res.status(404).json({
-            message: "There Is No User With This Email Or Phone Number"
+        const isHasUser = await userModel.findOne({
+            $or: [{ email: identifire }, { phone: identifire }]
         })
+        if (!isHasUser) {
+            return res.status(404).json({
+                message: "There Is No User With This Email Or Phone Number"
+            })
+        }
+
+        //Check Password
+        const isPasswordValid = await bcrypt.compare(password, isHasUser.password);
+
+        if (!isPasswordValid) {
+            return res.status(401).json({
+                message: "The Password Is Wrong"
+            })
+        }
+
+        // Delete Pass In Object
+        const userLogin = isHasUser.toObject();
+        Reflect.deleteProperty(userLogin, 'password');
+
+        //Create AccessToken
+        const accessToken = jwt.sign({ id: isHasUser._id }, process.env.JWTSECRET, { expiresIn: "15 day" });
+        return res.status(200).json({ user: userLogin, accessToken });
+
+    } catch (error) {
+        next(error)
     }
-
-    //Check Password
-    const isPasswordValid = await bcrypt.compare(password, isHasUser.password);
-
-    if (!isPasswordValid) {
-        return res.status(401).json({
-            message: "The Password Is Wrong"
-        })
-    }
-
-    // Delete Pass In Object
-    const userLogin = isHasUser.toObject();
-    Reflect.deleteProperty(userLogin, 'password');
-
-    //Create AccessToken
-    const accessToken = jwt.sign({ id: isHasUser._id }, process.env.JWTSECRET, { expiresIn: "15 day" });
-    return res.status(200).json({ user: userLogin, accessToken });
 }
 const getMe = async (req, res) => {
     res.status(200).json(
