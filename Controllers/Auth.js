@@ -117,10 +117,15 @@ const login = async (req, res, next) => {
         next(error)
     }
 }
-const getMe = async (req, res) => {
-    res.status(200).json(
-        { user: req.user }
-    )
+const getMe = async (req, res, error) => {
+    try {
+
+        res.status(200).json(
+            { user: req.user }
+        )
+    } catch (error) {
+        next(error)
+    }
 }
 const editProfile = async (req, res) => {
     const { fullname } = req.body
