@@ -127,12 +127,15 @@ const getMe = async (req, res, error) => {
         next(error)
     }
 }
-const editProfile = async (req, res) => {
-    const { fullname } = req.body
-
-    const userProfile = await userModel.findOneAndUpdate({ _id: req.user._id }, { fullname });
-    if (userProfile) {
-        res.status(200).json({ message: "Edit Profile Success" })
+const editProfile = async (req, res, next) => {
+    try {
+        const { fullname } = req.body
+        const userProfile = await userModel.findOneAndUpdate({ _id: req.user._id }, { fullname });
+        if (userProfile) {
+            res.status(200).json({ message: "Edit Profile Success" })
+        }
+    } catch (error) {
+        next(error)
     }
 }
 const editProfileImage = async (req, res) => {
