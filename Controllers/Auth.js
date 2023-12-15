@@ -9,70 +9,75 @@ import registerValidator from '../Validators/RegisterValidate.js'
 import converToPersian from '../Utils/PersianDate.js'
 
 //--
-const register = async (req, res) => {
+const register = async (req, res, next) => {
 
-    const { email, phone, password } = req.body
+    try {
+        const { email, phone, password } = req.body
 
-    const phoneRegex = /^09[\d]{9}$/
+        const phoneRegex = /^09[\d]{9}$/
 
-    if (!phoneRegex.test(phone)) {
-        return res.status(409).json({
-            message: "The Phone Number Format Is Not Correct"
-        })
+        if (!phoneRegex.test(phone)) {
+            return res.status(409).json({
+                message: "The Phone Number Format Is Not Correct"
+            })
+        }
+        //Validate
+        const registerValidate = registerValidator(req.body);
+
+        if (registerValidate !== true) {
+            return res.status(422).json(registerValidate);
+        }
+
+        //Check Exist User
+        const checkExistUser = await userModel.find({
+            $or: [{ email }, { phone }]
+        }).lean()
+        if (checkExistUser.length > 0) {
+            return res.status(409).json({
+                message: "Duplicate Email Or Phone Number"
+            })
+        }
+
+
+        //Ceck Ban User
+        const isBanUser = await banUserModel.find({
+            $or: [{ email }, { phone }]
+        }).lean()
+        if (isBanUser.length > 0) {
+            return res.status(409).json({
+                message: "Your Email Or Phone Number Has Been Blocked"
+            })
+        }
+
+        //Check Users Count 
+        const userCount = await userModel.find({}).count();
+
+        //Hash Password
+        const hashedPassword = await bcrypt.hash(password, 10);
+
+        //Create User Model And Register
+        const newUser = await userModel.create({
+            email,
+            phone,
+            fullname: email.split('@')[0],
+            password: hashedPassword,
+            role: userCount === 0 ? "ADMIN" : "USER",
+            profile: 'user.png'
+        });
+
+        //Delete PassWord From User Model
+        const newUserModelFilter = newUser.toObject();
+        Reflect.deleteProperty(newUserModelFilter, 'password');
+
+        //Create Access Token
+        const accessToken = jwt.sign({ id: newUser._id }, process.env.JWTSECRET, { expiresIn: '15 day' });
+
+        //Send Response
+        res.status(201).json({ user: newUserModelFilter, accessToken });
+
+    } catch (error) {
+        next(error);
     }
-    //Validate
-    const registerValidate = registerValidator(req.body);
-
-    if (registerValidate !== true) {
-        return res.status(422).json(registerValidate);
-    }
-
-    //Check Exist User
-    const checkExistUser = await userModel.find({
-        $or: [{ email }, { phone }]
-    }).lean()
-    if (checkExistUser.length > 0) {
-        return res.status(409).json({
-            message: "Duplicate Email Or Phone Number"
-        })
-    }
-
-
-    //Ceck Ban User
-    const isBanUser = await banUserModel.find({
-        $or: [{ email }, { phone }]
-    }).lean()
-    if (isBanUser.length > 0) {
-        return res.status(409).json({
-            message: "Your Email Or Phone Number Has Been Blocked"
-        })
-    }
-
-    //Check Users Count 
-    const userCount = await userModel.find({}).count();
-
-    //Hash Password
-    const hashedPassword = await bcrypt.hash(password, 10);
-
-    //Create User Model And Register
-    const newUser = await userModel.create({
-        email,
-        phone,
-        fullname: email.split('@')[0],
-        password: hashedPassword,
-        role: userCount === 0 ? "ADMIN" : "USER",
-        profile: 'user.png'
-    });
-
-    //Delete PassWord From User Model
-    const newUserModelFilter = newUser.toObject();
-    Reflect.deleteProperty(newUserModelFilter, 'password');
-
-    //Create Access Token
-    const accessToken = jwt.sign({ id: newUser._id }, process.env.JWTSECRET, { expiresIn: '15 day' });
-
-    //Send Response
-    res.status(201).json({ user: newUserModelFilter, accessToken });
 }
 const login = async (req, res) => {
 
