@@ -23,15 +23,21 @@ const create = async (req, res, next) => {
     }
 
 }
-const remove = async (req, res) => {
+const remove = async (req, res, next) => {
 }
 const update = async (req, res) => {
 }
-const getAll = async (req, res) => {
-    const categories = await categoryModel.find({}).lean();
-    console.log(categories);
-    if (categories) {
-        res.status(200).json(categories);
+const getAll = async (req, res, next) => {
+    try {
+
+
+        const categories = await categoryModel.find({}).lean();
+        console.log(categories);
+        if (categories) {
+            res.status(200).json(categories);
+        }
+    } catch (error) {
+        next(error)
     }
 }
 const getCategoryMap = async (req, res) => {
