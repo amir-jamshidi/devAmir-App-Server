@@ -1,20 +1,25 @@
 import categoryModel from '../Models/Category.js'
 
-const create = async (req, res) => {
+const create = async (req, res, next) => {
+    try {
 
-    const { name, href } = req.body;
 
-    const category = await categoryModel.create({
-        name,
-        href
-    })
+        const { name, href } = req.body;
 
-    if (category) {
-        res.status(201).json(category);
-    } else {
-        res.status(400).json({
-            message: "Error Adding Category"
+        const category = await categoryModel.create({
+            name,
+            href
         })
+
+        if (category) {
+            res.status(201).json(category);
+        } else {
+            res.status(400).json({
+                message: "Error Adding Category"
+            })
+        }
+    } catch (error) {
+        next(error)
     }
 
 }
