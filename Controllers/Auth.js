@@ -151,8 +151,6 @@ const editProfileImage = async (req, res, next) => {
 const getDashboard = async (req, res) => {
 
     try {
-
-
         const ticketsCount = await ticketsModel.find({ creatorID: req.user._id }).count().lean();
         const coursesCount = await courseRegister.find({ userID: req.user._id }).count().lean();
         const tickets = await ticketsModel.find({ creatorID: req.user._id }).limit(3).sort({ _id: -1 }).lean();

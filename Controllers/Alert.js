@@ -7,7 +7,7 @@ const getAll = async (req, res, next) => {
             res.status(200).json(allAlert)
         }
     } catch (error) {
-        next();
+        next(error);
     }
 }
 
@@ -24,7 +24,7 @@ const insetAlert = async (req, res, next) => {
             })
         }
     } catch (error) {
-        next()
+        next(error)
     }
 
 }
