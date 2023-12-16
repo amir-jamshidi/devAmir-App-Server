@@ -150,22 +150,27 @@ const editProfileImage = async (req, res, next) => {
 }
 const getDashboard = async (req, res) => {
 
-    const ticketsCount = await ticketsModel.find({ creatorID: req.user._id }).count().lean();
-    const coursesCount = await courseRegister.find({ userID: req.user._id }).count().lean();
-    const tickets = await ticketsModel.find({ creatorID: req.user._id }).limit(3).sort({ _id: -1 }).lean();
-    const courses = await courseRegister.find({ userID: req.user._id }).populate('courseID').limit(3).sort({ _id: -1 }).lean();
+    try {
 
-    courses.forEach(course => {
-        course.createdAt = converToPersian(course.createdAt);
-    })
 
-    res.status(200).json({
-        ticketsCount,
-        coursesCount,
-        tickets,
-        courses
-    })
+        const ticketsCount = await ticketsModel.find({ creatorID: req.user._id }).count().lean();
+        const coursesCount = await courseRegister.find({ userID: req.user._id }).count().lean();
+        const tickets = await ticketsModel.find({ creatorID: req.user._id }).limit(3).sort({ _id: -1 }).lean();
+        const courses = await courseRegister.find({ userID: req.user._id }).populate('courseID').limit(3).sort({ _id: -1 }).lean();
 
+        courses.forEach(course => {
+            course.createdAt = converToPersian(course.createdAt);
+        })
+
+        res.status(200).json({
+            ticketsCount,
+            coursesCount,
+            tickets,
+            courses
+        })
+    } catch (error) {
+        next(error);
+    }
 }
 
 export {
