@@ -13,7 +13,7 @@ const create = async (req, res, next) => {
             res.status(201).json(session);
         }
     } catch (error) {
-        next();
+        next(error);
     }
 
 
@@ -34,7 +34,7 @@ const createMeeting = async (req, res, next) => {
             res.status(201).json(meeting)
         }
     } catch (err) {
-        next()
+        next(err)
     }
 
 }
@@ -67,7 +67,7 @@ const getMeeting = async (req, res, next) => {
             message: "Not Found"
         })
     } catch (error) {
-        next()
+        next(err)
     }
 }
 
