@@ -10,7 +10,7 @@ const create = async (req, res, next) => {
         }
     }
     catch (error) {
-        next();
+        next(error);
     }
 }
 const getTickets = async (req, res, next) => {
@@ -20,7 +20,7 @@ const getTickets = async (req, res, next) => {
             res.status(200).json(tickets)
         }
     } catch (error) {
-        next()
+        next(error)
     }
 
 }
@@ -35,7 +35,7 @@ const getOne = async (req, res, next) => {
             res.status(200).json(ticket)
         }
     } catch (error) {
-        next()
+        next(error)
     }
 }
 export {
