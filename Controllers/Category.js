@@ -40,10 +40,16 @@ const getAll = async (req, res, next) => {
         next(error)
     }
 }
-const getCategoryMap = async (req, res) => {
-    const categories = await categoryModel.find({}).limit(4).lean();
-    if (categories) {
-        res.status(200).json(categories);
+const getCategoryMap = async (req, res, next) => {
+    try {
+
+
+        const categories = await categoryModel.find({}).limit(4).lean();
+        if (categories) {
+            res.status(200).json(categories);
+        }
+    } catch (error) {
+        next(error)
     }
 }
 const getOne = async (req, res) => {
