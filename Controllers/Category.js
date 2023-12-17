@@ -52,12 +52,17 @@ const getCategoryMap = async (req, res, next) => {
         next(error)
     }
 }
-const getOne = async (req, res) => {
-    const { href } = req.params;
-    const category = await categoryModel.findOne({ href });
-    if (category) {
-        res.status(200).json(category);
+const getOne = async (req, res, next) => {
+    try {
+        const { href } = req.params;
+        const category = await categoryModel.findOne({ href });
+        if (category) {
+            res.status(200).json(category);
+        }
+    } catch (error) {
+        next(error)
     }
+
 }
 
 export {
