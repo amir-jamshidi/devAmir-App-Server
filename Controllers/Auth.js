@@ -117,7 +117,7 @@ const login = async (req, res, next) => {
         next(error)
     }
 }
-const getMe = async (req, res, error) => {
+const getMe = async (req, res, next) => {
     try {
 
         res.status(200).json(
@@ -148,7 +148,7 @@ const editProfileImage = async (req, res, next) => {
         next(error);
     }
 }
-const getDashboard = async (req, res) => {
+const getDashboard = async (req, res , next) => {
 
     try {
         const ticketsCount = await ticketsModel.find({ creatorID: req.user._id }).count().lean();
