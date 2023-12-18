@@ -16,7 +16,7 @@ const create = async (req, res, next) => {
             res.status(201).json(question)
         }
     } catch (error) {
-        next()
+        next(error)
     }
 }
 
@@ -50,7 +50,7 @@ const getQuestion = async (req, res, next) => {
             res.status(200).json({ course, questions });
         }
     } catch (error) {
-        next();
+        next(error);
     }
 }
 
@@ -68,7 +68,7 @@ const getOne = async (req, res, next) => {
         question.createdAt = converToPersian(question.createdAt)
         res.status(200).json(question);
     } catch (error) {
-        next()
+        next(error)
     }
 
 }
