@@ -10,7 +10,7 @@ const create = async (req, res, next) => {
             res.status(200).json({ message: "Send Cooperation Success" });
         }
     } catch (error) {
-        next()
+        next(error)
     }
 }
 
