@@ -15,7 +15,7 @@ const create = async (req, res, next) => {
             })
         }
     } catch (error) {
-        next()
+        next(error)
     }
 }
 
@@ -44,7 +44,7 @@ const getAll = async (req, res, next) => {
             })
         }
     } catch (error) {
-        next()
+        next(error)
     }
 }
 export {
