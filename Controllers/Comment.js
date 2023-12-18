@@ -12,7 +12,7 @@ const create = async (req, res, next) => {
             res.status(201).json(comment);
         }
     } catch (error) {
-        next();
+        next(error);
     }
 }
 const gteComments = async (req, res, next) => {
@@ -33,7 +33,7 @@ const gteComments = async (req, res, next) => {
 
         return res.status(200).json(comments);
     } catch (error) {
-        next();
+        next(error);
     }
 
 }
@@ -42,7 +42,7 @@ const getMainCommnets = async (req, res, next) => {
         const comments = await commentModel.find({ score: 5, isShow: 1 }).sort({ _id: -1 }).populate('creatorID').populate('courseID', 'href name').limit(8).lean();
         res.status(200).json(comments)
     } catch (error) {
-        next();
+        next(error);
     }
 }
 export {
