@@ -16,7 +16,7 @@ const create = async (req, res, next) => {
             res.status(201).json(course);
         }
     } catch (error) {
-        next()
+        next(error)
     }
 }
 
@@ -58,7 +58,7 @@ const getAll = async (req, res, next) => {
             return res.status(200).json(allCourses)
         }
     } catch (error) {
-        next()
+        next(error)
     }
 }
 
@@ -69,7 +69,7 @@ const getLastedCourses = async (req, res, next) => {
             return res.status(200).json(lastedCourses)
         }
     } catch (error) {
-
+        next(error)
     }
 }
 
@@ -80,7 +80,7 @@ const getPopularCourses = async (req, res, next) => {
             res.status(200).json(popularCourses)
         }
     } catch (error) {
-        next()
+        next(error)
     }
 }
 
@@ -93,7 +93,7 @@ const getBestSellerCourses = async (req, res, next) => {
         }
 
     } catch (error) {
-
+        next(error)
     }
 }
 
@@ -142,7 +142,7 @@ const getOne = async (req, res, next) => {
             res.status(200).json(course);
         }
     } catch (error) {
-        next()
+        next(error)
     }
 }
 
@@ -169,7 +169,7 @@ const registerCourse = async (req, res, next) => {
         }
 
     } catch (error) {
-        next()
+        next(error)
     }
 }
 
@@ -201,7 +201,7 @@ const getByCategoryID = async (req, res, next) => {
         res.status(200).json(courses);
 
     } catch (error) {
-        next()
+        next(error)
     }
 }
 
@@ -246,7 +246,7 @@ const searchCourses = async (req, res, next) => {
             }
         }
     } catch (error) {
-        next()
+        next(error)
     }
 
 }
@@ -261,7 +261,7 @@ const getMyCourses = async (req, res, next) => {
             res.status(200).json(courses);
         }
     } catch (error) {
-        next();
+        next(error);
     }
 }
 
