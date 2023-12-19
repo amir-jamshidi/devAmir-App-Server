@@ -14,6 +14,15 @@ const create = async (req, res, next) => {
     }
 }
 
+const answer = async (req, res, next) => {
+    try {
+
+    } catch (error) {
+
+    }
+}
+
 export {
-    create
+    create,
+    answer
 } 
