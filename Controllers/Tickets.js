@@ -38,6 +38,13 @@ const getOne = async (req, res, next) => {
         next(error)
     }
 }
+const remove = async (req , res , next)=>{
+    try {
+        
+    } catch (error) {
+        
+    }
+}
 export {
     create,
     getTickets,
