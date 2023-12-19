@@ -71,7 +71,13 @@ const getMeeting = async (req, res, next) => {
     }
 }
 
-
+const remove = async (req , res, next)=>{
+    try {
+        
+    } catch (error) {
+        
+    }
+}
 export {
     create,
     createMeeting,
