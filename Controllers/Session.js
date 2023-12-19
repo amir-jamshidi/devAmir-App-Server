@@ -67,7 +67,7 @@ const getMeeting = async (req, res, next) => {
             message: "Not Found"
         })
     } catch (error) {
-        next(err)
+        next(error)
     }
 }
 
