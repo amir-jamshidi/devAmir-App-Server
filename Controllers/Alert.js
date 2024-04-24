@@ -11,6 +11,7 @@ const getAll = async (req, res, next) => {
     }
 }
 
+
 const insetAlert = async (req, res, next) => {
     try {
         const { title, body, btn, color, isShow, href } = req.body
