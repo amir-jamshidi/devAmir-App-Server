@@ -29,6 +29,7 @@ const insetAlert = async (req, res, next) => {
     }
 
 }
+
 export {
     getAll,
     insetAlert
