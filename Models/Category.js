@@ -9,7 +9,8 @@ const schema = new mongoose.Schema({
         type: String,
         required: true
     }
-},{ timestamps: true })
+},
+{ timestamps: true })
 
 const model = mongoose.model('category', schema);
 
