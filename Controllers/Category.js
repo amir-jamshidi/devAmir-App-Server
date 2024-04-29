@@ -27,7 +27,6 @@ const update = async (req, res) => {
 const getAll = async (req, res, next) => {
     try {
 
-
         const categories = await categoryModel.find({}).lean();
         console.log(categories);
         if (categories) {
