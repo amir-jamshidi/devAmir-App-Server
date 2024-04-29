@@ -3,7 +3,6 @@ import categoryModel from '../Models/Category.js'
 const create = async (req, res, next) => {
     try {
         const { name, href } = req.body;
-
         const category = await categoryModel.create({
             name,
             href
