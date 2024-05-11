@@ -3,6 +3,7 @@ import alertModel from "../Models/Alert.js";
 
 
 
+
 const getAll = async (req, res, next) => {
     try {
         const allAlert = await alertModel.find({ isShow: 1 }).populate('creator', 'fullname').lean();
