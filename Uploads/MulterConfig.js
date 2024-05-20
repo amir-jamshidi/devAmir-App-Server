@@ -10,6 +10,7 @@ const __dirname = path.dirname(__filename);
 
 
 export default multer.diskStorage({
+    
     destination: (req, res, cb) => {
         cb(null, path.join(__dirname, '..', 'public', 'courses', 'covers'))
     },
@@ -18,5 +19,6 @@ export default multer.diskStorage({
         const ext = path.extname(file.originalname);
         cb(null, filename + ext)
     }
+    
 })
 
