@@ -4,7 +4,6 @@ import express from 'express'
 import cors from 'cors'
 import bodyParser from 'body-parser'
 import moment from 'jalali-moment'
-
 //--
 
 import alertRoutes from './Routes/Alert.js'
