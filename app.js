@@ -18,7 +18,6 @@ import questionsRoutes from './Routes/Question.js'
 import bansRoutes from './Routes/Bans.js'
 
 //--
-
 const app = express();
 
 //--
