@@ -10,6 +10,7 @@ const alertSchema = new mongoose.Schema({
         type: String,
         required: true
     },
+ 
     btn: {
         type: String,
         default: ""
