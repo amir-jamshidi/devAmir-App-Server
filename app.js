@@ -30,6 +30,7 @@ app.use(cors());
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use('/courses/covers', express.static(path.join(__dirname, 'public', 'courses', 'covers')));
+
 //--
 
 app.use('/alerts', alertRoutes);
