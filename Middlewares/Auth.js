@@ -3,7 +3,6 @@ import jwt from 'jsonwebtoken'
 import userModel from '../Models/User.js'
 
 const verifyUser = async (req, res, next) => {
-
     //Verify Token
     const token = req.header('Authorization')?.split(" ");
     if (token?.length !== 2) {
