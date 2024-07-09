@@ -6,7 +6,6 @@ import bodyParser from 'body-parser'
 import moment from 'jalali-moment'
 
 //--
-
 import alertRoutes from './Routes/Alert.js'
 import authRoutes from './Routes/Auth.js'
 import menusRoutes from './Routes/Menu.js'
