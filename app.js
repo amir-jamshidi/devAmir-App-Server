@@ -16,7 +16,6 @@ import ticketRoutes from './Routes/Tickets.js'
 import cooperationRoutes from './Routes/Cooperation.js'
 import questionsRoutes from './Routes/Question.js'
 import bansRoutes from './Routes/Bans.js'
-
 //--
 const app = express();
 //--
