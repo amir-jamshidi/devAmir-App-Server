@@ -15,3 +15,5 @@ alertRouter.route('/')
     .post(AuthMiddle, IsAdminMiddle, insetAlert);
 
 export default alertRouter
+
+
