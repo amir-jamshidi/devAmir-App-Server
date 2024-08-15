@@ -3,6 +3,7 @@ import express from "express";
 import multer from "multer";
 //--
 import { register, login, getMe, editProfile, editProfileImage, getDashboard } from '../Controllers/Auth.js'
+
 import AuthMiddle from '../Middlewares/Auth.js'
 import uploaderMiddle from '../Uploads/MulterConfig.js'
 //--
