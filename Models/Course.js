@@ -67,7 +67,6 @@ const schema = new mongoose.Schema({
         type: String,
         default: "در حال برگزاری"
     },
-
 }, { timestamps: true });
 const model = mongoose.model('course', schema);
 export default model; 
